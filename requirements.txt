@@ -1,1 +1,6 @@
 customtkinter
+pyserial 
+requests 
+psutil
+time
+configparser

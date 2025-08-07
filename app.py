@@ -4,8 +4,8 @@ import json
 import subprocess
 import sys
 
-from core.impListe import liste_imprimantes
-from core.fonctions import log_message
+from Core.impListe import liste_imprimantes
+from Core.fonctions import log_message
 
 class App(ctk.CTk):
     def __init__(self):

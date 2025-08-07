@@ -20,7 +20,7 @@ def log_message(message):
             log_file.write(log_entry)
             
     except Exception as e:
-        print("Impossible d'écrire dans le fichier log : {e}")
+        print(f"Impossible d'écrire dans le fichier log : {e}")
         print(f"Message original: {message}")
 
 

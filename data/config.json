@@ -1,0 +1,42 @@
+{
+    "Serveur": {
+        "url": "",
+        "vitesse_boucle": 1000
+    },
+    "Imprimante1": {
+        "type": "PDF",
+        "source_mode": "Auto IP",
+        "source_ip_manuelle": "N.A.",
+        "destination_mode": "Imprimantes",
+        "destination": "Canon_MP280_series"
+    },
+    "Imprimante2": {
+        "type": "Ticket",
+        "source_mode": "Auto IP",
+        "source_ip_manuelle": "N.A.",
+        "destination_mode": "Imprimantes",
+        "destination": "Canon_MP280_series"
+    },
+    "Imprimante3": {
+        "type": "Desactiver"
+    },
+    "Imprimante4": {
+        "type": "Desactiver"
+    },
+    "Imprimante5": {
+        "type": "Desactiver"
+    },
+    "LCD": {
+        "status": "Activer",
+        "com_port": "",
+        "vitesse": "",
+        "nb_caracteres": ""
+    },
+    "TPE": {
+        "status": "Activer",
+        "mode": "TPV IP",
+        "test_mode": "Désactivé",
+        "ip_address": "",
+        "ip_port": ""
+    }
+}

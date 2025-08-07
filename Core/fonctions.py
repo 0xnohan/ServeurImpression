@@ -83,7 +83,7 @@ def telecharger_fichier(url_serveur, ip, type_fichier):
                         f.write(reponse.content)
                     return chemin_destination
 
-            except requests.exceptions.RequestException:
+            except requests.exceptions.RequestException as e:
                 log_message(f"[FONCTION]: Erreur lors de la requête {url_complete}: {e}")
                 continue
         return None

@@ -2,6 +2,8 @@ import time
 import os
 from fonctions import charger_config, get_ip, telecharger_fichier, log_message
 
+prefixeLog = "[SERVEUR]"
+
 def main():
     print("Serveur d'impression en cours d'exécution...")
 
@@ -11,7 +13,7 @@ def main():
         while True:
             config = charger_config()
             if not config:
-                log_message("[SERVEUR]: Configuration introuvable ou non définie, nouvel essai dans 10s...")
+                log_message(prefixeLog, "Configuration introuvable ou non définie, nouvel essai dans 10s...")
                 time.sleep(10)
                 continue
 
@@ -20,7 +22,7 @@ def main():
             vitesse = serveur_config.get('vitesse_boucle', 1000)
 
             if not url_serveur:
-                log_message("[SERVEUR]: L'URL du serveur n'est pas définie dans config.json")
+                log_message(prefixeLog, "URL du serveur n'est pas définie dans config.json")
                 time.sleep(5)
                 continue
 
@@ -43,7 +45,7 @@ def main():
                     ip = imprimante_config.get('source_ip_manuelle')
                 
                 if not ip:
-                    log_message(f"[SERVEUR]: IP non définie pour {nom_imprimante}")
+                    log_message(prefixeLog, f"IP non définie pour {nom_imprimante}")
                     continue
 
                 fichier_telecharge = telecharger_fichier(url_serveur, ip, type_fichier)
@@ -56,7 +58,7 @@ def main():
             time.sleep(delai_secondes)
 
     except Exception as e:
-        log_message(f"[SERVEUR]: Erreur dans la boucle principale: {e}")
+        log_message(prefixeLog, f"Erreur dans la boucle principale: {e}")
     finally:
         print("--- Fin du processus serveur ---")
 

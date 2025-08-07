@@ -4,17 +4,19 @@ import os
 import json
 from datetime import datetime
 
+prefixeLog = "[FONCTION]"
+
 # =============================================================================
 # FONCTION LOG.TXT
 # =============================================================================
 
-def log_message(message):
+def log_message(prefixe,message):
     try:
         base_dir = os.path.dirname(os.path.abspath(__file__))
         log_path = os.path.join(base_dir, "..", "data", "log.txt")
         
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log_entry = f"[{timestamp}] {message}\n"
+        log_entry = f"[{timestamp}] {prefixe}: {message}\n"
         
         with open(log_path, 'a', encoding='utf-8') as log_file:
             log_file.write(log_entry)
@@ -38,7 +40,7 @@ def get_ip():
         return ip
     
     except Exception as e:
-        log_message(f"[FONCTION]: Erreur lors de la récupération de l'adresse IP: {e}")
+        log_message(prefixeLog, f"Erreur lors de la récupération de l'adresse IP: {e}")
         return None
       
 # Charger la configuration depuis le fichier config.json    
@@ -47,7 +49,7 @@ def charger_config():
     config_path = os.path.join(base_dir, "..", "data", "config.json")
     
     if not os.path.exists(config_path):
-        log_message(f"[FONCTION]: Le fichier de configuration est introuvable à {config_path}")
+        log_message(prefixeLog, f"Le fichier de configuration est introuvable à {config_path}")
         return None
     else: 
         with open(config_path, 'r') as f:
@@ -84,10 +86,10 @@ def telecharger_fichier(url_serveur, ip, type_fichier):
                     return chemin_destination
 
             except requests.exceptions.RequestException:
-                log_message(f"[FONCTION]: Erreur lors de la requête {url_complete}: {e}")
+                log_message(prefixeLog, f"Erreur lors de la requête {url_complete}: {e}")
                 continue
         return None
 
     except Exception as e:
-        log_message(f"[FONCTION]: Erreur inattendue dans la fonction de téléchargement: {e}")
+        log_message(prefixeLog, f"Erreur inattendue dans la fonction de téléchargement: {e}")
         return None

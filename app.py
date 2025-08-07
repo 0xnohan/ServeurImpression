@@ -35,6 +35,8 @@ class App(ctk.CTk):
         # S'assurer que le serveur est arrêté à la fermeture de la fenêtre
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
+        self.prefixeLog = "[APP]"
+
     #Haut de page Serveur
     def server_section(self):
         server_frame = ctk.CTkFrame(self.main_frame)
@@ -328,7 +330,7 @@ class App(ctk.CTk):
             self.status_label.configure(text="✔️ Configuration sauvegardée", text_color="green")
 
         except Exception as e:
-            log_message(f"[APP]: Erreur pendant la sauvegarde de la configuration: {e}")
+            log_message(self.prefixeLog,f"Erreur pendant la sauvegarde de la configuration: {e}")
             self.status_label.configure(text=f"❌ Erreur: {e}", text_color="red")
         
         self.after(3000, lambda: self.status_label.configure(text="Prêt", text_color="gray"))
@@ -403,7 +405,7 @@ class App(ctk.CTk):
             self.after(3000, lambda: self.status_label.configure(text="Prêt", text_color="gray"))
 
         except Exception as e:
-            log_message(f"[APP]: Erreur lors du chargement de la configuration: {e}")
+            log_message(self.prefixeLog, f"Erreur lors du chargement de la configuration: {e}")
             self.status_label.configure(text=f"❌ Erreur chargement: {e}", text_color="red")
             self.after(4000, lambda: self.status_label.configure(text="Prêt", text_color="gray"))
 
@@ -426,7 +428,7 @@ class App(ctk.CTk):
             self.status_label.configure(text="✔️ Serveur démarré", text_color="green")
             
         except Exception as e:
-            log_message(f"[APP]: Erreur lors du lancement du serveur: {e}")
+            log_message(self.prefixeLog, f"Erreur lors du lancement du serveur: {e}")
             self.status_label.configure(text=f"❌ Erreur lancement: {e}", text_color="red")
             self.server_process = None
 

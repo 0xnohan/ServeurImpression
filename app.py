@@ -143,7 +143,7 @@ class App(ctk.CTk):
         
         ctk.CTkLabel(ip_frame, text="Source").grid(row=0, column=0, padx=10, pady=5)
         
-        manual_ip_entry = ctk.CTkEntry(ip_frame, placeholder_text="ex: 192.168.0.32")
+        manual_ip_entry = ctk.CTkEntry(ip_frame, placeholder_text="ex: 192.168.1.100")
         self.widgets[key_prefix]['manual_ip'] = manual_ip_entry
 
         def toggle_ip_entry():

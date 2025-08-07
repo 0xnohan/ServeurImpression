@@ -52,7 +52,7 @@ def main():
                     pass
                     # La logique d'impression et de suppression sera ajoutée ici
             
-            delai_secondes = vitesse/ 1000
+            delai_secondes = vitesse / 1000
             time.sleep(delai_secondes)
 
     except Exception as e:

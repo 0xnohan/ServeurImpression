@@ -124,6 +124,9 @@ def imprimerFichier(chemin_fichier, imprimante_config):
         
         return imprimerSerie(chemin_fichier, port, vitesse)
     
+    else:
+        logMessage(prefixeLog, f"Mode de destination non supporté: '{destination_mode}'")
+        return False
 # Supprimer le fichier en local et sur le serveur après impression
 def supprimerFichier(chemin_fichier, url_serveur):
     nom_fichier = os.path.basename(chemin_fichier)

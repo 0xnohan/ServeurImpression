@@ -24,9 +24,10 @@ def logMessage(prefixe, message):
         with open(log_path, 'a', encoding='utf-8') as log_file:
             log_file.write(log_entry)
             
-    except:
+    except OSError as e:
         print("Impossible d'écrire dans le fichier log")
         print(f"Message original: {message}")
+        print(f"Erreur: {e}")
 
 
 # =============================================================================

@@ -4,8 +4,8 @@ import json
 import subprocess
 import sys
 
-from Core.impListe import liste_imprimantes
-from Core.fonctions import log_message
+from Core.fonctionsIMPR import listeImprimantes
+from Core.fonctions import logMessage
 
 class App(ctk.CTk):
     def __init__(self):
@@ -54,7 +54,7 @@ class App(ctk.CTk):
         self.widgets['serveur_vitesse'] = ctk.CTkEntry(server_frame)
         self.widgets['serveur_vitesse'].grid(row=2, column=1, padx=20, pady=(5, 15), sticky="ew")
 
-    #Menu des sections
+    # Menu des sections
     def tabs_section(self):
         tab_view = ctk.CTkTabview(self.main_frame, anchor="w", segmented_button_selected_hover_color="#36719F")
         tab_view.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
@@ -132,8 +132,8 @@ class App(ctk.CTk):
             else:
                 config_options_frame.grid()
 
-        ctk.CTkRadioButton(type_frame, text="PDF", variable=type_var, value="PDF", command=toggle_config_visibility).pack(side="left", padx=5)
-        ctk.CTkRadioButton(type_frame, text="Ticket", variable=type_var, value="Ticket", command=toggle_config_visibility).pack(side="left", padx=5)
+        ctk.CTkRadioButton(type_frame, text="PDF", variable=type_var, value="pdf", command=toggle_config_visibility).pack(side="left", padx=5)
+        ctk.CTkRadioButton(type_frame, text="Ticket", variable=type_var, value="txt", command=toggle_config_visibility).pack(side="left", padx=5)
         ctk.CTkRadioButton(type_frame, text="Désactiver", variable=type_var, value="Desactiver", command=toggle_config_visibility).pack(side="left", padx=5)
 
         ip_frame = ctk.CTkFrame(config_options_frame)
@@ -181,7 +181,7 @@ class App(ctk.CTk):
         ctk.CTkRadioButton(destination_frame, text="Imprimantes", variable=dest_mode_var, value="Imprimantes", command=toggle_destination_frames).grid(row=0, column=0, padx=10, pady=5, sticky="w")
         ctk.CTkRadioButton(destination_frame, text="Imprimante Série COM", variable=dest_mode_var, value="Série COM", command=toggle_destination_frames).grid(row=0, column=0, padx=(150, 10), pady=5, sticky="w")
         
-        printers = liste_imprimantes()
+        printers = listeImprimantes()
         self.widgets[key_prefix]['dest_imprimante_win'] = ctk.CTkComboBox(frame_windows_printers, values=printers)
         self.widgets[key_prefix]['dest_imprimante_win'].pack(fill="x", expand=True)
 
@@ -330,7 +330,7 @@ class App(ctk.CTk):
             self.status_label.configure(text="✔️ Configuration sauvegardée", text_color="green")
 
         except Exception as e:
-            log_message(self.prefixeLog,f"Erreur pendant la sauvegarde de la configuration: {e}")
+            logMessage(self.prefixeLog,f"Erreur pendant la sauvegarde de la configuration: {e}")
             self.status_label.configure(text=f"❌ Erreur: {e}", text_color="red")
         
         self.after(3000, lambda: self.status_label.configure(text="Prêt", text_color="gray"))
@@ -405,7 +405,7 @@ class App(ctk.CTk):
             self.after(3000, lambda: self.status_label.configure(text="Prêt", text_color="gray"))
 
         except Exception as e:
-            log_message(self.prefixeLog, f"Erreur lors du chargement de la configuration: {e}")
+            logMessage(self.prefixeLog, f"Erreur lors du chargement de la configuration: {e}")
             self.status_label.configure(text=f"❌ Erreur chargement: {e}", text_color="red")
             self.after(4000, lambda: self.status_label.configure(text="Prêt", text_color="gray"))
 
@@ -419,16 +419,14 @@ class App(ctk.CTk):
         self.status_label.configure(text="Lancement du serveur...", text_color="#28a745")
         try:
             python_executable = sys.executable
-            base_dir = os.path.dirname(os.path.abspath(__file__))
-            server_script_path = os.path.join(base_dir, "Core", "serveur.py")
-            
-            self.server_process = subprocess.Popen([python_executable, server_script_path])
+
+            self.server_process = subprocess.Popen([python_executable, "-m", "Core.serveur"])
             
             self.start_stop_button.configure(text="Arrêter Serveur", command=self.toggle_server, fg_color="#dc3545", hover_color="#c82333")
             self.status_label.configure(text="✔️ Serveur démarré", text_color="green")
             
         except Exception as e:
-            log_message(self.prefixeLog, f"Erreur lors du lancement du serveur: {e}")
+            logMessage(self.prefixeLog, f"Erreur lors du lancement du serveur: {e}")
             self.status_label.configure(text=f"❌ Erreur lancement: {e}", text_color="red")
             self.server_process = None
 

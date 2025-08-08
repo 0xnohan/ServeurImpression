@@ -4,18 +4,20 @@
         "vitesse_boucle": 1000
     },
     "Imprimante1": {
-        "type": "PDF",
-        "source_mode": "Auto IP",
-        "source_ip_manuelle": "N.A.",
+        "type": "pdf",
+        "source_mode": "Manuel",
+        "source_ip_manuelle": "caisse",
         "destination_mode": "Imprimantes",
-        "destination": "Canon_MP280_series"
+        "destination": ""
     },
     "Imprimante2": {
-        "type": "Ticket",
+        "type": "txt",
         "source_mode": "Auto IP",
         "source_ip_manuelle": "N.A.",
-        "destination_mode": "Imprimantes",
-        "destination": "Canon_MP280_series"
+        "destination_mode": "Série COM",
+        "destination": "COM",
+        "port_com": "",
+        "vitesse_com": ""
     },
     "Imprimante3": {
         "type": "Desactiver"

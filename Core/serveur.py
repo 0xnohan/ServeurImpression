@@ -1,66 +1,81 @@
 import time
-import os
-from fonctions import charger_config, get_ip, telecharger_fichier, log_message
+from .fonctions import chargerConfig, getIP, telechargerFichier, logMessage, imprimerFichier, supprimerFichier
+
+
 
 prefixeLog = "[SERVEUR]"
 
+# =============================================================================
+# PROCESSUS IMPRIMANTE 
+# =============================================================================
+def traiterImprimante(imprimante_config, url_serveur, auto_ip,):
+    type_fichier = imprimante_config.get('type')
+    if not type_fichier or type_fichier == 'Desactiver':
+        return 
+
+    ip = None
+    source_mode = imprimante_config.get('source_mode', 'Auto IP')
+    
+    if source_mode == 'Auto IP':
+        ip = auto_ip
+    elif source_mode == 'Manuel':
+        ip = imprimante_config.get('source_ip_manuelle')
+    
+    if not ip:
+        return
+
+    fichier_telecharge = telechargerFichier(url_serveur, ip, type_fichier)
+
+    if fichier_telecharge:
+        impression_reussie = imprimerFichier(fichier_telecharge, imprimante_config)
+        
+        if impression_reussie:
+            supprimerFichier(fichier_telecharge, url_serveur)
+        else:
+            logMessage(prefixeLog, "Échec de l'impression")
+
+
+
+# =============================================================================
+# BOUCLE PRINCIPALE SERVEUR
+# =============================================================================
 def main():
     print("Serveur d'impression en cours d'exécution...")
-
-    auto_ip = get_ip()
+    auto_ip = getIP()
 
     try:
         while True:
-            config = charger_config()
+            config = chargerConfig()
+
             if not config:
-                log_message(prefixeLog, "Configuration introuvable ou non définie, nouvel essai dans 10s...")
+                logMessage(prefixeLog, "Configuration introuvable ou non définie, nouvel essai dans 10s...")
                 time.sleep(10)
                 continue
 
+            # Charger la configuration de la section "Serveur"
             serveur_config = config.get('Serveur', {})
             url_serveur = serveur_config.get('url')
             vitesse = serveur_config.get('vitesse_boucle', 1000)
+            delai_secondes = vitesse/ 1000
 
             if not url_serveur:
-                log_message(prefixeLog, "URL du serveur n'est pas définie dans config.json")
+                logMessage(prefixeLog, "URL du serveur n'est pas définie dans config.json")
                 time.sleep(5)
                 continue
 
-            #Chaque section d'imprimante
+            # Boucle sur chaque section d'imprimante
             for i in range(1, 6):
-                nom_imprimante = f'Imprimante{i}'
-                imprimante_config = config.get(nom_imprimante, {})
-                
-                type_fichier = imprimante_config.get('type', 'Desactiver')
-                if type_fichier == 'Desactiver':
-                    continue
-
-                ip = None
-                mode_source = imprimante_config.get('source_mode', 'Auto IP')
-
-                if mode_source == 'Auto IP':
-                    ip = auto_ip
-
-                elif mode_source == 'Manuel':
-                    ip = imprimante_config.get('source_ip_manuelle')
-                
-                if not ip:
-                    log_message(prefixeLog, f"IP non définie pour {nom_imprimante}")
-                    continue
-
-                fichier_telecharge = telecharger_fichier(url_serveur, ip, type_fichier)
-
-                if fichier_telecharge:
-                    pass
-                    # La logique d'impression et de suppression sera ajoutée ici
+                nom_imprimante_section = f'Imprimante{i}'
+                if nom_imprimante_section in config:
+                    imprimante_config = config[nom_imprimante_section]
+                    traiterImprimante(imprimante_config, url_serveur, auto_ip)
             
-            delai_secondes = vitesse/ 1000
             time.sleep(delai_secondes)
-
+            
     except Exception as e:
-        log_message(prefixeLog, f"Erreur dans la boucle principale: {e}")
+        logMessage(prefixeLog, f"Erreur dans la boucle principale: {e}")
     finally:
-        print("--- Fin du processus serveur ---")
+        print("Fin du serveur d'impression.")
 
 if __name__ == "__main__":
     main()

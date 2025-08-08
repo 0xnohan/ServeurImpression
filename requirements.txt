@@ -1,8 +1,4 @@
 customtkinter
-pyserial 
 requests 
-psutil
 time
-configparser
-serial
 win32print

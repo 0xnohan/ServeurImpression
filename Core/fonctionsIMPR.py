@@ -40,7 +40,7 @@ def listeImprimantes():
             )
             imprimantes = [imprimante['pName'] for imprimante in imprimantes_info]
         except ImportError:
-            None
+            print("Erreur: Le module pywin32 n'est pas installé, impossible de récupérer la liste des imprimantes Windows.")
     
     elif systeme in ["Linux", "Darwin"]:  
         try:

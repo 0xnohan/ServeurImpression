@@ -1,4 +1,4 @@
 customtkinter
-requests 
-time
-win32print
+requests
+pyserial
+pywin32; sys_platform == 'win32'

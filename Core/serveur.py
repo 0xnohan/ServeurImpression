@@ -1,5 +1,5 @@
 import time
-from .fonctions import chargerConfig, getIP, telechargerFichier, logMessage, imprimerFichier, supprimerFichier
+from .fonctions import chargerConfig, getIP, telechargerFichier, logMessage, imprimerFichier, supprimerFichier, traiterTPE
 
 
 
@@ -30,6 +30,7 @@ def traiterImprimante(imprimante_config, url_serveur, auto_ip,):
         impression_reussie = imprimerFichier(fichier_telecharge, imprimante_config)
         
         if impression_reussie:
+            time.sleep(0.5)
             supprimerFichier(fichier_telecharge, url_serveur)
         else:
             logMessage(prefixeLog, "Échec de l'impression")
@@ -52,7 +53,7 @@ def main():
                 time.sleep(10)
                 continue
 
-            # Charger la configuration de la section "Serveur"
+            # Charger la configuration de la section "Serveur" du fichier json
             serveur_config = config.get('Serveur', {})
             url_serveur = serveur_config.get('url')
             vitesse = serveur_config.get('vitesse_boucle', 1000)
@@ -69,6 +70,10 @@ def main():
                 if nom_imprimante_section in config:
                     imprimante_config = config[nom_imprimante_section]
                     traiterImprimante(imprimante_config, url_serveur, auto_ip)
+
+            if 'TPE' in config and config['TPE'].get('status') == 'Activer':
+                tpe_config = config['TPE']
+                traiterTPE(tpe_config, url_serveur, auto_ip)
             
             time.sleep(delai_secondes)
             

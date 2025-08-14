@@ -41,7 +41,7 @@ def listeImprimantes():
             )
             imprimantes = [imprimante[2] for imprimante in imprimantes_info]
         except ImportError:
-            None
+            return []
 
     
     elif systeme in ["Linux", "Darwin"]:  

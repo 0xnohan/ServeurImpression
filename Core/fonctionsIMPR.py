@@ -1,6 +1,7 @@
 import platform
 import subprocess
 import time
+import os
 
 # =============================================================================
 # RECUPERATION DU SYSTEME D'EXPLOITATION
@@ -38,9 +39,10 @@ def listeImprimantes():
                 None,
                 1
             )
-            imprimantes = [imprimante['pName'] for imprimante in imprimantes_info]
+            imprimantes = [imprimante[2] for imprimante in imprimantes_info]
         except ImportError:
             None
+
     
     elif systeme in ["Linux", "Darwin"]:  
         try:
@@ -61,13 +63,35 @@ def listeImprimantes():
 # =============================================================================
 
 def imprimerWindows(chemin_fichier, nom_imprimante):
-    try:
-        win32api.ShellExecute(0, "print", chemin_fichier, f'"{nom_imprimante}"', ".", 0)
-        return True
-    # confirmation de l'impression réussie
-    except Exception as e:
-        print(f"Erreur d'impression Windows sur '{nom_imprimante}': {e}")
+    if not win32print:
+        print("Erreur: Le module pywin32 n'est pas disponible pour l'impression Windows.")
         return False
+
+    try:
+        hPrinter = win32print.OpenPrinter(nom_imprimante)
+        try:
+            nom_fichier_base = os.path.basename(chemin_fichier)
+            datatype = "RAW"
+            
+            hJob = win32print.StartDocPrinter(hPrinter, 1, (nom_fichier_base, None, datatype))
+            try:
+                win32print.StartPagePrinter(hPrinter)
+                try:
+                    with open(chemin_fichier, "rb") as f:
+                        win32print.WritePrinter(hPrinter, f.read())
+                finally:
+                    win32print.EndPagePrinter(hPrinter)
+            finally:
+                win32print.EndDocPrinter(hPrinter)
+        finally:
+            win32print.ClosePrinter(hPrinter)
+        
+        return True
+
+    except Exception as e:
+        print(f"Erreur d'impression Windows API sur '{nom_imprimante}': {e}")
+        return False
+
 
 
 def imprimerLM(chemin_fichier, nom_imprimante):
@@ -93,4 +117,47 @@ def imprimerSerie(chemin_fichier, port, vitesse):
         return False
     except Exception as e:
         print(f"Erreur lors de l'impression série: {e}")
+        return False
+
+
+def imprimerTicket(chemin_fichier, nom_imprimante):
+    if not win32print:
+        print("Erreur: Le module pywin32 n'est pas disponible.")
+        return False
+    
+    CMD_INIT = b'\x1b@'
+    CMD_CODEPAGE = b'\x1b\x74\x00'
+    CMD_CUT = b'\x1d\x56\x01'
+
+    try:
+        hPrinter = win32print.OpenPrinter(nom_imprimante)
+        try:
+            nom_fichier_base = os.path.basename(chemin_fichier)
+            hJob = win32print.StartDocPrinter(hPrinter, 1, (nom_fichier_base, None, "RAW"))
+            try:
+                win32print.StartPagePrinter(hPrinter)
+                try:
+                    with open(chemin_fichier, "r", encoding="utf-8", errors='ignore') as f:
+                        text_data = f.read()
+
+                    encoded_data = text_data.encode('cp437', errors='replace')
+                    
+                    print("Mode Ticket. Encodage en CP437 et ajout des commandes ESC/POS.")
+                    donnees_a_imprimer = (
+                        CMD_INIT +
+                        CMD_CODEPAGE + 
+                        encoded_data + 
+                        b'\n\n\n\n' +   
+                        CMD_CUT
+                    )
+                    win32print.WritePrinter(hPrinter, donnees_a_imprimer)
+                finally:
+                    win32print.EndPagePrinter(hPrinter)
+            finally:
+                win32print.EndDocPrinter(hPrinter)
+        finally:
+            win32print.ClosePrinter(hPrinter)
+        return True
+    except Exception as e:
+        print(f"Erreur d'impression Ticket sur '{nom_imprimante}': {e}")
         return False

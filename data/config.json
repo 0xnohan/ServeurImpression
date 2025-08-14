@@ -1,23 +1,13 @@
 {
     "Serveur": {
         "url": "",
-        "vitesse_boucle": 1000
+        "vitesse_boucle": 2000
     },
     "Imprimante1": {
-        "type": "pdf",
-        "source_mode": "Manuel",
-        "source_ip_manuelle": "caisse",
-        "destination_mode": "Imprimantes",
-        "destination": ""
+        "type": "Desactiver"
     },
     "Imprimante2": {
-        "type": "txt",
-        "source_mode": "Auto IP",
-        "source_ip_manuelle": "N.A.",
-        "destination_mode": "Série COM",
-        "destination": "COM",
-        "port_com": "",
-        "vitesse_com": ""
+        "type": "Desactiver"
     },
     "Imprimante3": {
         "type": "Desactiver"
@@ -35,7 +25,7 @@
         "nb_caracteres": ""
     },
     "TPE": {
-        "status": "Activer",
+        "status": "Desactiver",
         "mode": "TPV IP",
         "test_mode": "Désactivé",
         "ip_address": "",

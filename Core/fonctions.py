@@ -210,7 +210,7 @@ def traiterTPE(tpe_config, url_serveur, auto_ip):
                 ip_tpe = tpe_config.get('ip_address')
                 port_tpe = tpe_config.get('ip_port')
                 if ip_tpe and port_tpe:
-                    envoyerReqTpeIp(ip_tpe, port_tpe)
+                    envoyerReqTpeIp(fichier_tpe, ip_tpe, port_tpe)
                 else:
                     logMessage("[TPE]", "Configuration IP du TPE manquante.")
 

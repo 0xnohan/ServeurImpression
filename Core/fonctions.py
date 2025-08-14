@@ -24,9 +24,10 @@ def logMessage(prefixe, message):
         with open(log_path, 'a', encoding='utf-8') as log_file:
             log_file.write(log_entry)
             
-    except:
+    except OSError as e:
         print("Impossible d'écrire dans le fichier log")
         print(f"Message original: {message}")
+        print(f"Erreur: {e}")
 
 
 # =============================================================================
@@ -137,6 +138,9 @@ def imprimerFichier(chemin_fichier, imprimante_config):
         
         return imprimerSerie(chemin_fichier, port, vitesse)
     
+    else:
+        logMessage(prefixeLog, f"Mode de destination non supporté: '{destination_mode}'")
+        return False
 # Supprimer le fichier en local et sur le serveur après impression
 def supprimerFichier(chemin_fichier, url_serveur):
     nom_fichier = os.path.basename(chemin_fichier)

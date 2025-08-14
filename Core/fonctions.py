@@ -97,7 +97,7 @@ def telechargerFichier(url_serveur, ip, extension):
             #print(chemin_destination)
             return chemin_destination
 
-    except requests.exceptions.RequestException:
+    except requests.exceptions.RequestException as e:
         logMessage(prefixeLog, f"Erreur lors de la requête {url_complete}: {e}")
         return None
 

@@ -1,0 +1,7 @@
+# Gitignored files copied into every Claude-created worktree.
+# Only files that match a pattern AND are gitignored are copied,
+# so listing something this project doesn't have is a harmless no-op.
+.env
+.env.local
+.vscode/sftp.json
+.claude/rsync-excludes

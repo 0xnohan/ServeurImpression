@@ -5,3 +5,6 @@
 .env.local
 .vscode/sftp.json
 .claude/rsync-excludes
+CLAUDE.md
+.claude/schema.sql
+.claude/deploy.conf
